@@ -190,15 +190,17 @@ def reserve():
         start        = data['start']
         end          = data['end']
         username     = data.get('username')
-        # Récupérer l'id de l'utilisateur connecté
+        
         user_id = get_user_id(username)
         if not user_id:
             return jsonify({"success": False, "message": "Utilisateur non trouvé."})
-        if type_chambre not in TYPES_CHAMBRES:
-            return jsonify({"success": False, "message": "Type de chambre invalide"})
+            
         libres = chambres_libres(start, end)
         if not libres[type_chambre]:
             return jsonify({"success": False, "message": "Plus de chambres disponibles"})
+            
+        print(f"Tentative d'insertion pour user_id: {user_id}")
+        
         result = supabase.table("reservations").insert({
             "nom":          data['nom'],
             "prenom":       data['prenom'],
@@ -211,8 +213,15 @@ def reserve():
             "pin_code":     generate_pin(),
             "user_id":      user_id
         }).execute()
+        
+        print(f"Résultat Supabase: {result}")
+        
+        if not result.data:
+            return jsonify({"success": False, "message": "L'insertion a échoué dans Supabase"})
+            
         return jsonify({"success": True, "reservation": format_res(result.data[0])})
     except Exception as e:
+        print(f"Erreur lors de la réservation: {str(e)}")
         return jsonify({"success": False, "message": str(e)})
 
 
