@@ -33,3 +33,8 @@ ENV/
 reservations.json
 users.json
 facture_*.pdf
+
+# Variables d'environnement (clés secrètes — ne jamais pusher !)
+.env
+.env.local
+.env*.local
