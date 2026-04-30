@@ -2,7 +2,7 @@ import os
 import random
 import hashlib
 from datetime import datetime
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from supabase import create_client, Client
 
@@ -77,6 +77,16 @@ def format_res(r):
         "pin_code":     r["pin_code"],
         "user_id":      r.get("user_id")
     }
+
+# ── ROUTE RACINE (Pour Vercel) ─────────────────────────────────────────────────
+
+@app.route('/')
+def index():
+    return send_from_directory('../', 'index.html')
+
+@app.route('/<path:path>')
+def static_proxy(path):
+    return send_from_directory('../', path)
 
 # ── AUTH ──────────────────────────────────────────────────────────────────────
 
