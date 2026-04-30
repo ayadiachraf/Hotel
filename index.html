@@ -8,6 +8,7 @@
 
     <!-- Lien vers notre fichier CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="logo.png">
 
     <!-- Importation d'une police moderne depuis Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -103,8 +104,8 @@
     <section id="contact" class="contact">
         <h2>Contactez-Nous</h2>
         <div class="contact-container">
-            <p>📍Rte Tunis, Cité Ons, Sfax, Tunisie</p>
-            <p>📞 +216 99 654 321 </p>
+            <p>📍 Rte Tunis, Cité Ons, Sfax</p>
+            <p 📞 +216 99 654 321 </p>
             <p>✉️ Luxehotel.contact@gmail.com</p>
         </div>
     </section>
@@ -253,7 +254,8 @@
 
         // CONFIGURATION : Changez cette URL après l'hébergement sur PythonAnywhere
         // Exemple : const API_URL = "https://votre-pseudo.pythonanywhere.com";
-        const API_URL = "http://127.0.0.1:5000";
+        const API_URL = "https://ayadiachraf23.pythonanywhere.com";
+
 
         // Fonction pour afficher un message élégant au centre
         function showMessage(titre, texte) {
@@ -395,7 +397,7 @@
                                         <p><strong>Chambre:</strong> N°${res.num_chambre}</p>
                                         <p><strong>Dates:</strong> Du ${res.start} au ${res.end}</p>
                                         <p><strong>PIN:</strong> ${res.pin_code}</p>
-                                        
+
                                         <div class="modify-form" id="mod-form-${res.id}" style="display:none">
                                             <label>Nouvelle date d'arrivée:</label>
                                             <input type="date" id="mod-start-${res.id}" value="${res.start}">
