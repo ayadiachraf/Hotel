@@ -1,0 +1,595 @@
+/* 
+   DESIGN SYSTEM FOR BEGINNERS 
+   This file handles all the visual styling: colors, fonts, and layouts.
+*/
+
+/* 1. Variables: These are reusable values (like colors) */
+:root {
+    --primary: #1a1a1a;
+    /* Dark background */
+    --accent: #c5a059;
+    /* Gold accent color for a luxury feel */
+    --white: #ffffff;
+    --gray-light: #f4f4f4;
+    --text-color: #333;
+    --transition: all 0.3s ease;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    /* A clean modern font */
+}
+
+body {
+    background-color: var(--white);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* 3. Navigation Bar */
+header {
+    background-color: var(--primary);
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    color: var(--accent);
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 2rem;
+}
+
+nav ul li a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+nav ul li a:hover {
+    color: var(--accent);
+}
+
+/* 4. Hero Section (Banner) */
+.hero {
+    height: 80vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('hotel_banner.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--white);
+}
+
+.hero h2 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+}
+
+/* 5. Search Bar / Booking Bar */
+.booking-bar {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 1rem;
+    margin-top: -50px;
+    width: 90%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.input-group input,
+.input-group select {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    color: var(--white);
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: flex-end;
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background-color: #b38f4a;
+    transform: translateY(-2px);
+}
+
+/* 6. Rooms Section */
+.rooms {
+    padding: 5rem 5%;
+    text-align: center;
+}
+
+.rooms h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.room-card {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+}
+
+.room-card:hover {
+    transform: translateY(-10px);
+}
+
+.room-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.room-info {
+    padding: 1.5rem;
+}
+
+.room-info h3 {
+    margin-bottom: 0.5rem;
+}
+
+.price {
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* 7. Contact Section */
+.contact {
+    padding: 5rem 5%;
+    background-color: var(--gray-light);
+    text-align: center;
+}
+
+.contact-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.contact-container p {
+    font-size: 1.1rem;
+    margin: 1rem 0;
+}
+
+/* 9. Modal (Fenêtre Pop-up) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow-y: auto; /* Permet de scroller si le contenu est long */
+}
+
+.modal-content {
+    background-color: var(--white);
+    margin: 5% auto; /* Marge réduite pour gagner de l'espace */
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    animation: slideDown 0.4s ease;
+    max-height: 90vh; /* Hauteur max de 90% de l'écran */
+    overflow-y: auto; /* Scroll interne si nécessaire */
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.reservation-details {
+    background: var(--gray-light);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.invoice-box {
+    border: 2px dashed #ddd;
+    padding: 2rem;
+    margin-top: 1rem;
+}
+
+/* 10. Auth Modal (Login / Sign Up) */
+.auth-tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #888;
+    transition: var(--transition);
+}
+
+.tab-btn.active {
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auth-form input {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.btn-auth {
+    background-color: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: var(--transition);
+}
+
+.btn-auth:hover {
+    background-color: var(--accent);
+    color: var(--white);
+}
+
+/* 11. Manage Reservation Section */
+.manage-reservation {
+    padding: 5rem 5%;
+    text-align: center;
+}
+
+.manage-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--gray-light);
+    padding: 3rem;
+    border-radius: 15px;
+}
+
+.search-box {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+}
+
+.search-box input {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.btn-group-manage {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.btn-secondary {
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: var(--white);
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content.dashboard-modal {
+    width: 80%;
+    max-width: 900px;
+}
+
+.modal-content.msg-modal {
+    width: 300px;
+    padding: 3rem 2rem;
+}
+
+.modal-content.msg-modal h2 {
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+/* 12. Dashboard Section (Logged in) */
+.dashboard-section {
+    padding: 5rem 5%;
+    text-align: center;
+    background-color: var(--white);
+}
+
+.res-table {
+    width: 100%;
+    margin-top: 2rem;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.res-table th,
+.res-table td {
+    padding: 1.2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.res-table th {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.btn-small {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+/* 13. Footer */
+footer {
+    background-color: var(--primary);
+    color: var(--white);
+    text-align: center;
+    padding: 3rem 0;
+    margin-top: 5rem;
+}
+
+.price-highlight {
+    font-size: 1.4rem;
+    color: var(--accent);
+    border-top: 1px solid #ddd;
+    margin-top: 15px;
+    padding-top: 10px;
+    font-weight: bold;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 5px;
+}
+
+.invoice-box-professional {
+    text-align: left;
+    padding: 20px;
+    background: white;
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px dashed #ccc;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.invoice-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+}
+
+.invoice-header h1 {
+    font-size: 1.2rem !important;
+    margin: 0;
+}
+
+.invoice-logo {
+    width: 100px !important;
+    height: auto !important;
+}
+
+.invoice-date {
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+}
+
+.invoice-details p {
+    margin: 5px 0;
+    line-height: 1.4;
+    font-size: 0.85rem;
+}
+
+.invoice-total {
+    margin-top: 30px;
+    border-top: 2px solid black;
+    padding-top: 10px;
+    font-size: 1.2rem;
+}
+
+.invoice-footer {
+    margin-top: 30px;
+    font-size: 0.8rem;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+
+.invoice-stamp {
+    width: 180px !important;
+    height: auto !important;
+    margin-top: 0 !important;
+    margin-right: auto;
+    opacity: 0.8;
+}
+
+.signature-area {
+    text-align: right;
+}
+
+.signature-line {
+    margin-top: 40px;
+    border-bottom: 1px solid black;
+    width: 180px;
+    margin-left: auto;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    .modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: white;
+    }
+
+    header,
+    footer,
+    .hero,
+    .booking-bar,
+    .rooms,
+    .contact {
+        display: none !important;
+    }
+}
+
+.res-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 20px;
+    padding-right: 10px;
+}
+
+.res-details-card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 15px;
+    text-align: left;
+    border-left: 5px solid var(--accent);
+}
+
+.modify-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modify-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}

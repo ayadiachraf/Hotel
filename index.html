@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxe Hotel - Système de Réservation</title>
+
+    <!-- Lien vers notre fichier CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Importation d'une police moderne depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- 1. En-tête (Navigation) -->
+    <header>
+        <div class="logo">
+            <h1>LUXE HOTEL</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#chambres">Nos Chambres</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li id="nav-res" style="display: none;"><a href="#" onclick="ouvrirDashboard()">Mes Réservations</a>
+                </li>
+                <li><a href="#" class="btn-auth" onclick="ouvrirAuth()">Connexion / Inscription</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 2. Section Hero (Bannière) -->
+    <section class="hero">
+        <h2>Découvrez l'élégance absolue</h2>
+        <p>Réservez votre séjour dans l'un des hôtels les plus prestigieux. Un confort inégalé vous attend.</p>
+    </section>
+
+    <!-- 3. Barre de Réservation (Le Formulaire) -->
+    <div class="booking-bar">
+        <div class="input-group">
+            <label>ARRIVÉE</label>
+            <input type="date" value="2024-04-28">
+        </div>
+        <div class="input-group">
+            <label>DÉPART</label>
+            <input type="date" value="2024-04-30">
+        </div>
+        <div class="input-group">
+            <label>TYPE DE CHAMBRE</label>
+            <select>
+                <option value="simple">Chambre Simple</option>
+                <option value="double">Chambre Double</option>
+                <option value="suite">Suite Royale</option>
+            </select>
+        </div>
+        <button class="btn-primary" onclick="verifierDispo()">VÉRIFIER LA DISPONIBILITÉ</button>
+    </div>
+
+    <!-- 4. Section des Chambres -->
+    <section id="chambres" class="rooms">
+        <h2>Nos Chambres d'Exception</h2>
+
+        <div class="room-grid">
+            <!-- Chambre Simple -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&q=80&w=600"
+                    alt="Chambre Simple">
+                <div class="room-info">
+                    <h3>Chambre Simple</h3>
+                    <p>Idéal pour les voyageurs en solo.</p>
+                    <p class="price">30 € / nuit</p>
+                </div>
+            </div>
+
+            <!-- Chambre Double -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=600"
+                    alt="Chambre Double">
+                <div class="room-info">
+                    <h3>Chambre Double</h3>
+                    <p>Espace et confort pour deux personnes.</p>
+                    <p class="price">50 € / nuit</p>
+                </div>
+            </div>
+
+            <!-- Suite Royale -->
+            <div class="room-card">
+                <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=600"
+                    alt="Suite Royale">
+                <div class="room-info">
+                    <h3>Suite Royale</h3>
+                    <p>Le luxe ultime avec vue panoramique.</p>
+                    <p class="price">70 € / nuit</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Section Contact -->
+    <section id="contact" class="contact">
+        <h2>Contactez-Nous</h2>
+        <div class="contact-container">
+            <p>📍Rte Tunis, Cité Ons, Sfax, Tunisie</p>
+            <p>📞 +216 99 654 321 </p>
+            <p>✉️ Luxehotel.contact@gmail.com</p>
+        </div>
+    </section>
+
+    <!-- 6. Fenêtre Modale pour le Tableau de Bord (Mes Réservations) -->
+    <div id="modal-dashboard" class="modal">
+        <div class="modal-content dashboard-modal">
+            <span class="close" onclick="fermerDashboard()">&times;</span>
+            <h2>Mes Réservations</h2>
+            <p>Voici la liste de vos réservations actives.</p>
+            <div id="reservations-list" class="res-list">
+                <p>Aucune réservation pour le moment.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 7. Fenêtre Modale (Pop-up) pour la confirmation et facture -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fermerModal()">&times;</span>
+            <div id="step-confirm">
+                <h2>Confirmer votre Réservation</h2>
+                <p>Voulez-vous confirmer votre séjour ?</p>
+                <div class="reservation-details">
+                    <div class="detail-row">
+                        <p><strong>Arrivée :</strong> <span id="view-start"></span> (à <span id="view-checkin"></span>)
+                        </p>
+                        <p><strong>Départ :</strong> <span id="view-end"></span> (à <span id="view-checkout"></span>)
+                        </p>
+                    </div>
+                    <div class="detail-row">
+                        <p><strong>Type :</strong> <span id="view-type"></span></p>
+                        <p><strong>Chambre :</strong> N°<span id="view-room"></span></p>
+                    </div>
+                    <div class="detail-row">
+                        <p><strong>Séjour :</strong> <span id="view-nights"></span> nuits / <span id="view-days"></span>
+                            jours</p>
+                    </div>
+                    <p class="price-highlight"><strong>Total :</strong> <span id="view-price"></span> €</p>
+                </div>
+                <button class="btn-primary" onclick="confirmerReservation()">CONFIRMER MAINTENANT</button>
+            </div>
+
+            <div id="step-invoice" style="display: none;">
+                <div class="invoice-box-professional">
+                    <div class="invoice-header">
+                        <img src="logo.png" alt="Logo" class="invoice-logo">
+                        <h1>FACTURE / RECU</h1>
+                    </div>
+                    <p class="invoice-date">Date émission : <span id="inv-date"></span></p>
+
+                    <div class="invoice-details">
+                        <p><strong>ID réservation :</strong> <span id="inv-id"></span></p>
+                        <p><strong>Nom :</strong> <span id="inv-name"></span></p>
+                        <p><strong>Contact :</strong> <span id="inv-contact"></span></p>
+                        <p><strong>Type chambre :</strong> <span id="inv-type"></span></p>
+                        <p><strong>N° chambre :</strong> <span id="inv-room"></span></p>
+                        <p><strong>Date d'arrivée :</strong> <span id="inv-start"></span></p>
+                        <p><strong>Date de départ :</strong> <span id="inv-end"></span></p>
+                    </div>
+
+                    <h2 class="invoice-total">Total à payer : <span id="inv-total"></span> euros</h2>
+
+                    <div class="invoice-footer">
+                        <p>Merci pour votre réservation.</p>
+                        <p>Conditions: paiement à l'arrivée. Pour annulation, contactez l'hôtel.</p>
+                        <div class="footer-bottom">
+                            <img src="stamp.png" alt="Cachet" class="invoice-stamp">
+                        </div>
+                    </div>
+
+                    <button class="btn-primary no-print" onclick="window.print()" style="margin-top: 20px;">IMPRIMER LA
+                        FACTURE (PDF)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Fenêtre Modale d'Authentification (Login / Sign Up) -->
+    <div id="modal-auth" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fermerAuth()">&times;</span>
+
+            <!-- Onglets Login/SignUP -->
+            <div class="auth-tabs">
+                <button id="tab-login" class="tab-btn active" onclick="switchAuth('login')">Se Connecter</button>
+                <button id="tab-signup" class="tab-btn" onclick="switchAuth('signup')">S'inscrire</button>
+            </div>
+
+            <!-- Formulaire Login -->
+            <div id="form-login" class="auth-form">
+                <h2>Bon retour parmi nous</h2>
+                <input type="email" placeholder="Email">
+                <input type="password" placeholder="Mot de passe">
+                <button class="btn-primary" onclick="simulerLogin()">CONNEXION</button>
+            </div>
+
+            <!-- Formulaire Sign Up -->
+            <div id="form-signup" class="auth-form" style="display: none;">
+                <h2>Créer un compte</h2>
+                <input type="text" placeholder="Nom complet" id="signup-name">
+                <input type="email" placeholder="Email" id="signup-email">
+                <input type="tel" placeholder="Téléphone (+216 -- --- ---)" id="signup-phone"
+                    pattern="\+216\s\d{2}\s\d{3}\s\d{3}" title="Format requis : +216 22 333 444">
+                <input type="password" placeholder="Mot de passe" id="signup-pass">
+                <button class="btn-primary" onclick="inscriptionReelle()">S'INSCRIRE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Fenêtre de Notification Personnalisée (Remplace les Alertes) -->
+    <div id="modal-msg" class="modal">
+        <div class="modal-content msg-modal">
+            <h2 id="msg-title">Notification</h2>
+            <p id="msg-text"></p>
+            <button class="btn-primary" onclick="fermerMsg()">OK</button>
+        </div>
+    </div>
+
+    <!-- 7. Fenêtre de Confirmation Personnalisée (Remplace confirm) -->
+    <div id="modal-confirm" class="modal">
+        <div class="modal-content msg-modal">
+            <h2 id="confirm-title">Confirmation</h2>
+            <p id="confirm-text"></p>
+            <div style="display:flex; justify-content:center; gap:10px; margin-top:20px;">
+                <button class="btn-primary" style="background:#e74c3c" id="btn-confirm-yes">Oui</button>
+                <button class="btn-secondary" id="btn-confirm-no">Non</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. Pied de page (Footer) -->
+    <footer>
+        <p>&copy; 2026 Luxe Hotel Management System. Tous droits réservés.</p>
+    </footer>
+
+    <!-- SCRIPT SIMPLE POUR DÉBUTANT (Petit ajout de JavaScript) -->
+    <script>
+        // Récupération des éléments du DOM
+        const modal = document.getElementById("modal");
+        const modalAuth = document.getElementById("modal-auth");
+        const modalDashboard = document.getElementById("modal-dashboard");
+        const modalMsg = document.getElementById("modal-msg");
+        const modalConfirm = document.getElementById("modal-confirm");
+
+        // CONFIGURATION : Changez cette URL après l'hébergement sur PythonAnywhere
+        // Exemple : const API_URL = "https://votre-pseudo.pythonanywhere.com";
+        const API_URL = "http://127.0.0.1:5000";
+
+        // Fonction pour afficher un message élégant au centre
+        function showMessage(titre, texte) {
+            document.getElementById("msg-title").innerText = titre;
+            document.getElementById("msg-text").innerText = texte;
+            modalMsg.style.display = "block";
+        }
+
+        function fermerMsg() { modalMsg.style.display = "none"; }
+
+        // Fonction pour afficher une confirmation élégante au centre
+        function showConfirm(titre, texte, callbackOui) {
+            document.getElementById("confirm-title").innerText = titre;
+            document.getElementById("confirm-text").innerText = texte;
+            modalConfirm.style.display = "block";
+
+            document.getElementById("btn-confirm-yes").onclick = function () {
+                modalConfirm.style.display = "none";
+                callbackOui();
+            };
+
+            document.getElementById("btn-confirm-no").onclick = function () {
+                modalConfirm.style.display = "none";
+            };
+        }
+
+        // État de connexion et liste des réservations (Simulation)
+        let isLoggedIn = false;
+
+        function verifierDispo() {
+            const start = document.querySelectorAll('.booking-bar input[type="date"]')[0].value;
+            const end = document.querySelectorAll('.booking-bar input[type="date"]')[1].value;
+            const type = document.querySelector('.booking-bar select').value;
+
+            fetch(`${API_URL}/check-dispo`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ start, end, type })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("view-start").innerText = data.start;
+                        document.getElementById("view-end").innerText = data.end;
+                        document.getElementById("view-type").innerText = data.type;
+                        document.getElementById("view-price").innerText = data.price;
+                        document.getElementById("view-room").innerText = data.room_number;
+                        document.getElementById("view-nights").innerText = data.nights;
+                        document.getElementById("view-days").innerText = data.days;
+                        document.getElementById("view-checkin").innerText = data.checkin;
+                        document.getElementById("view-checkout").innerText = data.checkout;
+
+                        modal.style.display = "block";
+                        document.getElementById("step-confirm").style.display = "block";
+                        document.getElementById("step-invoice").style.display = "none";
+                    } else {
+                        showMessage("Indisponible", data.message);
+                    }
+                });
+        }
+
+        function confirmerReservation() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user) {
+                showMessage("Connexion Requise", "Désolé, vous devez être connecté pour effectuer une réservation.");
+                fermerModal();
+                ouvrirAuth();
+            } else {
+                const reservationData = {
+                    nom: user.full_name.split(' ')[0] || "Client",
+                    prenom: user.full_name.split(' ')[1] || "Luxe",
+                    type_chambre: document.getElementById("view-type").innerText,
+                    start: document.getElementById("view-start").innerText,
+                    end: document.getElementById("view-end").innerText,
+                    contact: user.username,
+                    username: user.username
+                };
+
+                fetch(`${API_URL}/reserve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reservationData)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remplir la facture professionnelle
+                            document.getElementById("inv-date").innerText = new Date().toLocaleString();
+                            document.getElementById("inv-id").innerText = data.reservation.id;
+                            document.getElementById("inv-name").innerText = data.reservation.nom + " " + data.reservation.prenom;
+                            document.getElementById("inv-contact").innerText = user.phone || data.reservation.contact;
+                            document.getElementById("inv-type").innerText = data.reservation.type_chambre;
+                            document.getElementById("inv-room").innerText = data.reservation.num_chambre;
+                            document.getElementById("inv-start").innerText = data.reservation.start;
+                            document.getElementById("inv-end").innerText = data.reservation.end;
+
+                            // Calcul du prix (on peut le reprendre de la vue confirmation)
+                            document.getElementById("inv-total").innerText = document.getElementById("view-price").innerText;
+
+                            updateDashboard();
+                            document.getElementById("step-confirm").style.display = "none";
+                            document.getElementById("step-invoice").style.display = "block";
+                        } else {
+                            showMessage("Erreur", data.message);
+                        }
+                    });
+            }
+        }
+
+        function updateDashboard() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user) return;
+            const listDiv = document.getElementById("reservations-list");
+
+            fetch(`${API_URL}/reservations?username=${user.username}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        listDiv.innerHTML = "<p>Aucune réservation pour le moment.</p>";
+                        return;
+                    }
+
+                    let html = '<table class="res-table"><tr><th>ID</th><th>Chambre</th><th>Date</th><th>Actions</th></tr>';
+                    data.forEach((res) => {
+                        html += `
+                            <tr>
+                                <td>#${res.id}</td>
+                                <td>${res.type_chambre}</td>
+                                <td>${res.start}</td>
+                                <td>
+                                    <button class="btn-small" style="background:var(--primary)" onclick='voirInfos(${JSON.stringify(res)})'>Infos</button>
+                                </td>
+                            </tr>
+                            <tr id="details-${res.id}" style="display:none">
+                                <td colspan="4">
+                                    <div class="res-details-card">
+                                        <p><strong>Client:</strong> ${res.nom} ${res.prenom}</p>
+                                        <p><strong>Contact:</strong> ${res.contact}</p>
+                                        <p><strong>Chambre:</strong> N°${res.num_chambre}</p>
+                                        <p><strong>Dates:</strong> Du ${res.start} au ${res.end}</p>
+                                        <p><strong>PIN:</strong> ${res.pin_code}</p>
+                                        
+                                        <div class="modify-form" id="mod-form-${res.id}" style="display:none">
+                                            <label>Nouvelle date d'arrivée:</label>
+                                            <input type="date" id="mod-start-${res.id}" value="${res.start}">
+                                            <label>Nouvelle date de départ:</label>
+                                            <input type="date" id="mod-end-${res.id}" value="${res.end}">
+                                            <button class="btn-primary" onclick="sauvegarderModif(${res.id})">Valider Changement</button>
+                                        </div>
+
+                                        <div style="margin-top:15px; display:flex; gap:10px;">
+                                            <button class="btn-small" onclick="toggleModif(${res.id})" style="background:#2980b9">Modifier</button>
+                                            <button class="btn-small" onclick="annulerRes(${res.id})" style="background:#e74c3c">Annuler</button>
+                                            <button class="btn-small" onclick='imprimerAncienneFacture(${JSON.stringify(res)})' style="background:#2ecc71">Imprimer</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    });
+                    html += '</table>';
+                    listDiv.innerHTML = html;
+                });
+        }
+
+        function voirInfos(res) {
+            const el = document.getElementById(`details-${res.id}`);
+            el.style.display = el.style.display === "none" ? "table-row" : "none";
+        }
+
+        function toggleModif(id) {
+            const form = document.getElementById(`mod-form-${id}`);
+            form.style.display = form.style.display === "none" ? "flex" : "none";
+        }
+
+        function sauvegarderModif(id) {
+            const start = document.getElementById(`mod-start-${id}`).value;
+            const end = document.getElementById(`mod-end-${id}`).value;
+
+            fetch(`${API_URL}/modify-reservation`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, start, end })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage("Succès", "Votre réservation a été mise à jour.");
+                        updateDashboard();
+                    } else {
+                        showMessage("Erreur", data.message);
+                    }
+                });
+        }
+
+        function annulerRes(id) {
+            showConfirm("Annulation", "Voulez-vous vraiment annuler cette réservation ?", function () {
+                fetch(`${API_URL}/cancel-reservation`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            showMessage("Annulation", "La réservation a été annulée.");
+                            updateDashboard();
+                        } else {
+                            showMessage("Erreur", data.message);
+                        }
+                    });
+            });
+        }
+
+        function imprimerAncienneFacture(res) {
+            // Remplir la facture professionnelle
+            document.getElementById("inv-date").innerText = new Date().toLocaleString();
+            document.getElementById("inv-id").innerText = res.id;
+            document.getElementById("inv-name").innerText = res.nom + " " + res.prenom;
+            document.getElementById("inv-contact").innerText = res.contact;
+            document.getElementById("inv-type").innerText = res.type_chambre;
+            document.getElementById("inv-room").innerText = res.num_chambre;
+            document.getElementById("inv-start").innerText = res.start;
+            document.getElementById("inv-end").innerText = res.end;
+
+            // Calcul du prix
+            const startObj = new Date(res.start);
+            const endObj = new Date(res.end);
+            const nights = Math.max(1, (endObj - startObj) / (1000 * 3600 * 24));
+            const tarifs = { "simple": 30, "double": 50, "suite": 70 };
+            document.getElementById("inv-total").innerText = nights * tarifs[res.type_chambre];
+
+            fermerDashboard();
+            modal.style.display = "block";
+            document.getElementById("step-confirm").style.display = "none";
+            document.getElementById("step-invoice").style.display = "block";
+        }
+
+        function fermerModal() { modal.style.display = "none"; }
+
+        function ouvrirAuth() { modalAuth.style.display = "block"; }
+        function fermerAuth() { modalAuth.style.display = "none"; }
+
+        function ouvrirDashboard() {
+            updateDashboard();
+            modalDashboard.style.display = "block";
+        }
+        function fermerDashboard() { modalDashboard.style.display = "none"; }
+
+        function switchAuth(type) {
+            if (type === 'login') {
+                document.getElementById("form-login").style.display = "block";
+                document.getElementById("form-signup").style.display = "none";
+                document.getElementById("tab-login").classList.add("active");
+                document.getElementById("tab-signup").classList.remove("active");
+            } else {
+                document.getElementById("form-login").style.display = "none";
+                document.getElementById("form-signup").style.display = "block";
+                document.getElementById("tab-signup").classList.add("active");
+                document.getElementById("tab-login").classList.remove("active");
+            }
+        }
+
+        function simulerLogin() {
+            const email = document.querySelector('#form-login input[type="email"]').value;
+            const password = document.querySelector('#form-login input[type="password"]').value;
+
+            fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: email, password: password })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        localStorage.setItem("user", JSON.stringify(data.user));
+                        isLoggedIn = true;
+                        showMessage("Bienvenue", `Connexion réussie ! Ravie de vous revoir, ${data.user.full_name}.`);
+
+                        document.querySelector(".btn-auth").innerText = "Déconnexion";
+                        document.querySelector(".btn-auth").onclick = logout;
+                        document.querySelector(".btn-auth").style.borderColor = "#e74c3c";
+                        document.getElementById("nav-res").style.display = "inline-block";
+                        fermerAuth();
+                    } else {
+                        showMessage("Erreur", data.message);
+                    }
+                });
+        }
+
+        function inscriptionReelle() {
+            const fullName = document.getElementById("signup-name").value;
+            const email = document.getElementById("signup-email").value;
+            const phone = document.getElementById("signup-phone").value;
+            const password = document.getElementById("signup-pass").value;
+
+            fetch(`${API_URL}/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: email,
+                    password: password,
+                    full_name: fullName,
+                    email: email,
+                    phone: phone
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage("Succès", "Compte créé avec succès ! Vous pouvez maintenant vous connecter.");
+                        switchAuth('login');
+                    } else {
+                        showMessage("Erreur", data.message);
+                    }
+                });
+        }
+
+        function logout() {
+            localStorage.removeItem("user");
+            location.reload();
+        }
+
+        // Vérifier si déjà connecté au chargement
+        window.onload = function () {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                isLoggedIn = true;
+                document.querySelector(".btn-auth").innerText = "Déconnexion";
+                document.querySelector(".btn-auth").onclick = logout;
+                document.getElementById("nav-res").style.display = "inline-block";
+            }
+
+            // Auto-formattage du téléphone tunisien (+216 22 333 444)
+            const phoneInput = document.getElementById("signup-phone");
+            phoneInput.addEventListener("input", function (e) {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,2})(\d{0,3})(\d{0,3})/);
+                if (!x[1]) {
+                    e.target.value = "+216 ";
+                    return;
+                }
+                // Forcer le +216 au début
+                e.target.value = "+216 " + (x[2] ? x[2] + " " : "") + (x[3] ? x[3] + " " : "") + x[4];
+            });
+            // Initialiser avec +216
+            phoneInput.addEventListener("focus", function (e) {
+                if (!e.target.value) e.target.value = "+216 ";
+            });
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) fermerModal();
+            if (event.target == modalAuth) fermerAuth();
+            if (event.target == modalDashboard) fermerDashboard();
+            if (event.target == modalMsg) fermerMsg();
+            if (event.target == modalConfirm) { modalConfirm.style.display = "none"; }
+        }
+    </script>
+
+</body>
+
+</html>
