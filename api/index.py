@@ -17,6 +17,10 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+@app.before_request
+def log_request_info():
+    print(f"Request: {request.method} {request.path}")
+
 TARIFS = {"simple": 30, "double": 50, "suite": 70}
 TYPES_CHAMBRES = ["simple", "double", "suite"]
 CHAMBRES = {
@@ -91,6 +95,7 @@ def static_proxy(path):
 # ── AUTH ──────────────────────────────────────────────────────────────────────
 
 @app.route('/api/register', methods=['POST'])
+@app.route('/register', methods=['POST'])
 def register():
     data     = request.json
     username = data.get('username')
@@ -116,6 +121,7 @@ def register():
 
 
 @app.route('/api/login', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
     data     = request.json
     username = data.get('username')
@@ -139,6 +145,7 @@ def login():
 # ── RESERVATIONS ──────────────────────────────────────────────────────────────
 
 @app.route('/api/reservations', methods=['GET'])
+@app.route('/reservations', methods=['GET'])
 def get_reservations():
     username = request.args.get('username')
     user_id  = get_user_id(username)
@@ -183,6 +190,7 @@ def check_dispo():
 
 
 @app.route('/api/reserve', methods=['POST'])
+@app.route('/reserve', methods=['POST'])
 def reserve():
     data = request.json
     try:
