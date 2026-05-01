@@ -1,6 +1,6 @@
 # Rapport de Projet : Système de Gestion de Réservations Hôtelières "LUXE HOTEL"
 
-🔗 **Lien du site en direct :** [[https://ayadiachraf23.pythonanywhere.com](https://hotel-five-psi.vercel.app/)
+🔗 **Lien du site en direct :** [(https://hotel-five-psi.vercel.app/)](https://hotel-five-psi.vercel.app/)
 
 ## L'Histoire du Projet
 Ce projet est né de l'envie de simplifier la vie des voyageurs et des hôteliers. À une époque où tout va vite, j'ai voulu créer une plateforme qui allie la sobriété d'un design de luxe à la puissance d'un moteur de réservation automatisé. 
